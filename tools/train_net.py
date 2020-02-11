@@ -114,10 +114,18 @@ def setup(args):
     """
     Create configs and perform basic setups.
     """
+    #获取一份默认配置。位于detectron2/config/defaults.py
     cfg = get_cfg()
+    #config_file是指定的yaml配置文件，通过merge_from_file这个函数会将yaml文件中指定的超参数对默认值进行覆盖。
     cfg.merge_from_file(args.config_file)
+    #作用同上面的类似，只不过是通过命令行的方式覆盖。
     cfg.merge_from_list(args.opts)
+    #将超参数值冻结，避免被程序不小心修改
     cfg.freeze()
+    #Perform some basic common setups at the beginning of a job, including:
+    #1. Set up the detectron2 logger
+    #2. Log basic information about environment, cmdline arguments, and config
+    #3. Backup the config to the output directory
     default_setup(cfg, args)
     return cfg
 
